@@ -1,66 +1,42 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
+using static PulsarPluginLoader.Patches.HarmonyHelpers;
 
 namespace Better_Drunk
 {
     [HarmonyPatch(typeof(PLPlayer), "Update")]
-    class AlcoholMax
+    class PLPlayerUpdatePatch
     {
-        //private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        //{
-        //    List<CodeInstruction> targetSequence = new List<CodeInstruction>()
-        //    {
-        //        new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PLPlayer), "BAC")),
-        //        new CodeInstruction(OpCodes.Ldc_R4, 0),
-        //        new CodeInstruction(OpCodes.Ldc_R4, 1),
-        //    };
-
-        //    List<CodeInstruction> injectedSequence = new List<CodeInstruction>()
-        //    {
-        //        new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PLPlayer), "BAC")),
-        //        new CodeInstruction(OpCodes.Ldc_R4, 0),
-        //        new CodeInstruction(OpCodes.Ldc_R4, 100),
-        //    };
-
-        //    return HarmonyHelpers.PatchBySequence(instructions, targetSequence, injectedSequence, PatchMode.REPLACE);
-        //}
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> instructionList = instructions.ToList();
+            List<CodeInstruction> targetSequence1 = new List<CodeInstruction>()    
+            {
+                new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PLPlayer), "BAC")),
+                new CodeInstruction(OpCodes.Ldc_R4, 0f),
+                new CodeInstruction(OpCodes.Ldc_R4, 1f),
+            };
 
-            instructionList[412].opcode = OpCodes.Ldsfld;
-            instructionList[412].operand = AccessTools.Field(typeof(Global), "AlcoholMax");
+            List<CodeInstruction> injectedSequence1 = new List<CodeInstruction>()
+             {
+                new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PLPlayer), "BAC")),
+                new CodeInstruction(OpCodes.Ldc_R4, 0f),
+                new CodeInstruction(OpCodes.Ldc_R4, 100f)
+            };
 
-            return instructionList.AsEnumerable();
-        }
-    }
-    [HarmonyPatch(typeof(PLPlayer), "Update")]
-    class AlcoholSubtract
-    {
-        //private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
-        //{
-        //    List<CodeInstruction> targetSequence = new List<CodeInstruction>()
-        //    {
-        //        new CodeInstruction(OpCodes.Ldc_R4, 0.0015),
-        //    };
+            IEnumerable<CodeInstruction> Modified = PatchBySequence(instructions, targetSequence1, injectedSequence1, PatchMode.REPLACE);
 
-        //    List<CodeInstruction> injectedSequence = new List<CodeInstruction>()
-        //    {
-        //        new CodeInstruction(OpCodes.Ldc_R4, 0.015),
-        //    };
+            List<CodeInstruction> targetSequence2 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldc_R4, 0.0015f),
+            };
 
-        //    return HarmonyHelpers.PatchBySequence(instructions, targetSequence, injectedSequence, PatchMode.REPLACE);
-        //}
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            List<CodeInstruction> instructionList = instructions.ToList();
+            List<CodeInstruction> injectedSequence2 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(Global), "AlcoholSubtract")),
+            };
 
-            instructionList[404].opcode = OpCodes.Ldsfld;
-            instructionList[404].operand = AccessTools.Field(typeof(Global), "AlcoholSubtract"); ;
-
-            return instructionList.AsEnumerable();
+            return PatchBySequence(Modified, targetSequence2, injectedSequence2, PatchMode.REPLACE);
         }
     }
     [HarmonyPatch(typeof(PLPawnItem_Food), "OnAction")]
@@ -68,12 +44,29 @@ namespace Better_Drunk
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> instructionList = instructions.ToList();
+            List<CodeInstruction> targetSequence1 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldc_R4, 2f),
+            };
 
-            instructionList[73].opcode = OpCodes.Ldsfld;
-            instructionList[73].operand = AccessTools.Field(typeof(Global), "AlcoholPerDrink");
+            List<CodeInstruction> injectedSequence1 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(Global), "AlcoholPerDrink")),
+            };
 
-            return instructionList.AsEnumerable();
+            IEnumerable<CodeInstruction> Modified = PatchBySequence(instructions, targetSequence1, injectedSequence1, PatchMode.REPLACE);
+
+            List<CodeInstruction> targetSequence2 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldc_R4, 2f),
+            };
+
+            List<CodeInstruction> injectedSequence2 = new List<CodeInstruction>()
+            {
+                new CodeInstruction(OpCodes.Ldsfld, AccessTools.Field(typeof(Global), "AlcoholPerDrink")),
+            };
+
+            return PatchBySequence(Modified, targetSequence2, injectedSequence2, PatchMode.REPLACE);
         }
     }
 }

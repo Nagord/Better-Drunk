@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using static PulsarPluginLoader.Patches.HarmonyHelpers;
+using static PulsarModLoader.Patches.HarmonyHelpers;
 
 namespace Better_Drunk
 {

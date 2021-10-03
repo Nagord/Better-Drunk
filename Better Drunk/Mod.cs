@@ -1,10 +1,10 @@
-﻿using PulsarPluginLoader;
+﻿using PulsarModLoader;
 
 namespace Better_Drunk
 {
-    public class Plugin : PulsarPlugin
+    public class Mod : PulsarMod
     {
-        public override string Version => "0.2.2";
+        public override string Version => "0.2.3";
 
         public override string Author => "Dragon";
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Better_Drunk
+﻿namespace Better_Drunk
 {
     class Global
     {
